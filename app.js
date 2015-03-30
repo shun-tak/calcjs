@@ -1,12 +1,12 @@
 (function() {
 var cleared = true;
+var pointed = false;
 
 /**
  * クリアボタン
  */
 $(".btn-calc-c").click(function () {
-  cleared = true;
-  $("#result").html("0");
+  clear();
 });
 
 /**
@@ -55,7 +55,22 @@ $(".btn-calc-9").click(function () {
 });
 
 /**
- *
+ * 小数点ボタン
+ */
+$(".btn-calc-point").click(function () {
+  if (!pointed) {
+    pointed = true;
+    if (cleared) {
+      cleared = false;
+      $("#result").html("0.");
+    } else {
+      $("#result").append(".");
+    }
+  }
+});
+
+/**
+ * 受け取った数値を結果ウィンドウに並べる
  * @param num
  */
 function clickNumberButton(num) {
@@ -65,5 +80,22 @@ function clickNumberButton(num) {
   } else {
     $("#result").append(num);
   }
+}
+
+/**
+ * 結果ウィンドウ内に表示されている数値を返す
+ * @returns {number}
+ */
+function getCurrentNumber() {
+  return +$("#result").html();
+}
+
+/**
+ * 状態のクリア
+ */
+function clear() {
+  cleared = true;
+  pointed = false;
+  $("#result").html("0");
 }
 }());
