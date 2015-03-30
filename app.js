@@ -1,19 +1,24 @@
 (function() {
-var cleared = true;
+var imputableNewNumbers = true;
 var pointed = false;
+var prevNumber = 0;
+var calcMode = null; // FIXME Javaのenum的なの使いたい
 
 /**
  * クリアボタン
  */
 $(".btn-calc-c").click(function () {
-  clear();
+  clearDisplay();
+  clearStates();
+  prevNumber = 0;
+  calcMode = null;
 });
 
 /**
  * 数字ボタン
  */
 $(".btn-calc-0").click(function () {
-  if (!cleared) {
+  if (!imputableNewNumbers) {
     clickNumberButton(0);
   }
 });
@@ -60,8 +65,8 @@ $(".btn-calc-9").click(function () {
 $(".btn-calc-point").click(function () {
   if (!pointed) {
     pointed = true;
-    if (cleared) {
-      cleared = false;
+    if (imputableNewNumbers) {
+      imputableNewNumbers = false;
       $("#result").html("0.");
     } else {
       $("#result").append(".");
@@ -70,12 +75,42 @@ $(".btn-calc-point").click(function () {
 });
 
 /**
+ * イコールボタン
+ */
+$(".btn-calc-eq").click(function () {
+  if (calcMode === 'add') {
+    doAddition();
+  }
+});
+
+/**
+ * 加算ボタン
+ */
+$(".btn-calc-add").click(function () {
+  if (!imputableNewNumbers) {
+    calcMode = 'add';
+    doAddition();
+    prevNumber = getCurrentNumber();
+  }
+});
+
+/**
+ * 加算処理
+ */
+function doAddition() {
+  var sum = prevNumber + getCurrentNumber();
+  clearStates();
+  $("#result").html(sum);
+  console.log(prevNumber);
+}
+
+/**
  * 受け取った数値を結果ウィンドウに並べる
  * @param num
  */
 function clickNumberButton(num) {
-  if (cleared) {
-    cleared = false;
+  if (imputableNewNumbers) {
+    imputableNewNumbers = false;
     $("#result").html(num);
   } else {
     $("#result").append(num);
@@ -93,9 +128,15 @@ function getCurrentNumber() {
 /**
  * 状態のクリア
  */
-function clear() {
-  cleared = true;
+function clearStates() {
+  imputableNewNumbers = true;
   pointed = false;
+}
+
+/**
+ * 表示のクリア
+ */
+function clearDisplay() {
   $("#result").html("0");
 }
 }());
