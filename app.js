@@ -78,9 +78,7 @@ $(".btn-calc-point").click(function () {
  * イコールボタン
  */
 $(".btn-calc-eq").click(function () {
-  if (calcMode === 'add') {
-    doAddition();
-  }
+  doCalc();
 });
 
 /**
@@ -88,11 +86,62 @@ $(".btn-calc-eq").click(function () {
  */
 $(".btn-calc-add").click(function () {
   if (!imputableNewNumbers) {
+    doCalc();
     calcMode = 'add';
-    doAddition();
     prevNumber = getCurrentNumber();
   }
 });
+
+/**
+ * 減算ボタン
+ */
+$(".btn-calc-sub").click(function () {
+  if (!imputableNewNumbers) {
+    doCalc();
+    calcMode = 'sub';
+    prevNumber = getCurrentNumber();
+  }
+});
+
+/**
+ * 乗算ボタン
+ */
+$(".btn-calc-mul").click(function () {
+  if (!imputableNewNumbers) {
+    doCalc();
+    calcMode = 'mul';
+    prevNumber = getCurrentNumber();
+  }
+});
+
+/**
+ * 除算ボタン
+ */
+$(".btn-calc-div").click(function () {
+  if (!imputableNewNumbers) {
+    doCalc();
+    calcMode = 'div';
+    prevNumber = getCurrentNumber();
+  }
+});
+
+function doCalc() {
+  if (calcMode === null) {
+    return clearStates();
+  }
+  if (calcMode === 'add') {
+    return doAddition();
+  }
+  if (calcMode === 'sub') {
+    return doSubtract();
+  }
+  if (calcMode === 'mul') {
+    return doMultiply();
+  }
+  if (calcMode === 'div') {
+    return doDivision();
+  }
+}
 
 /**
  * 加算処理
@@ -101,7 +150,33 @@ function doAddition() {
   var sum = prevNumber + getCurrentNumber();
   clearStates();
   $("#result").html(sum);
-  console.log(prevNumber);
+}
+
+/**
+ * 減算処理
+ */
+function doSubtract() {
+  var diff = prevNumber - getCurrentNumber();
+  clearStates();
+  $("#result").html(diff);
+}
+
+/**
+ * 乗算処理
+ */
+function doMultiply() {
+  var mul = prevNumber * getCurrentNumber();
+  clearStates();
+  $("#result").html(mul);
+}
+
+/**
+ * 除算処理
+ */
+function doDivision() {
+  var div = prevNumber / getCurrentNumber();
+  clearStates();
+  $("#result").html(div);
 }
 
 /**
