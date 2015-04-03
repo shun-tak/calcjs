@@ -1,8 +1,18 @@
 (function() {
+var CalcMode = Object.freeze({
+  add: new CalcModeElement(1),
+  sub: new CalcModeElement(2),
+  mul: new CalcModeElement(3),
+  div: new CalcModeElement(4)
+});
+function CalcModeElement(key) {
+  this.val = key;
+}
+
 var imputableNewNumbers = true;
 var pointed = false;
 var prevNumber = 0;
-var calcMode = null; // FIXME Javaのenum的なの使いたい
+var calcMode = null;
 
 /**
  * クリアボタン
@@ -87,7 +97,7 @@ $(".btn-calc-eq").click(function () {
 $(".btn-calc-add").click(function () {
   if (!imputableNewNumbers) {
     doCalc();
-    calcMode = 'add';
+    calcMode = CalcMode.add;
     prevNumber = getCurrentNumber();
   }
 });
@@ -98,7 +108,7 @@ $(".btn-calc-add").click(function () {
 $(".btn-calc-sub").click(function () {
   if (!imputableNewNumbers) {
     doCalc();
-    calcMode = 'sub';
+    calcMode = CalcMode.sub;
     prevNumber = getCurrentNumber();
   }
 });
@@ -109,7 +119,7 @@ $(".btn-calc-sub").click(function () {
 $(".btn-calc-mul").click(function () {
   if (!imputableNewNumbers) {
     doCalc();
-    calcMode = 'mul';
+    calcMode = CalcMode.mul;
     prevNumber = getCurrentNumber();
   }
 });
@@ -120,7 +130,7 @@ $(".btn-calc-mul").click(function () {
 $(".btn-calc-div").click(function () {
   if (!imputableNewNumbers) {
     doCalc();
-    calcMode = 'div';
+    calcMode = CalcMode.div;
     prevNumber = getCurrentNumber();
   }
 });
@@ -129,16 +139,21 @@ function doCalc() {
   if (calcMode === null) {
     return clearStates();
   }
-  if (calcMode === 'add') {
+  if (!(calcMode instanceof CalcModeElement)) {
+    $("#result").html("Err");
+    clearStates();
+    return;
+  }
+  if (calcMode === CalcMode.add) {
     return doAddition();
   }
-  if (calcMode === 'sub') {
+  if (calcMode === CalcMode.sub) {
     return doSubtract();
   }
-  if (calcMode === 'mul') {
+  if (calcMode === CalcMode.mul) {
     return doMultiply();
   }
-  if (calcMode === 'div') {
+  if (calcMode === CalcMode.div) {
     return doDivision();
   }
 }
