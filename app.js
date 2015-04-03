@@ -28,7 +28,7 @@ $(".btn-calc-c").click(function () {
  * 数字ボタン
  */
 $(".btn-calc-0").click(function () {
-  if (!imputableNewNumbers) {
+  if (!imputableNewNumbers || calcMode instanceof CalcModeElement) {
     clickNumberButton(0);
   }
 });
@@ -189,7 +189,13 @@ function doMultiply() {
  * 除算処理
  */
 function doDivision() {
-  var div = prevNumber / getCurrentNumber();
+  var currentNumber = getCurrentNumber();
+  if (currentNumber === 0) {
+    $("#result").html('Err');
+    clearStates();
+    return;
+  }
+  var div = prevNumber / currentNumber;
   clearStates();
   $("#result").html(div);
 }
